@@ -24,11 +24,17 @@
     <ClInclude Include="..\..\..\include\node.h" />
     <ClInclude Include="..\..\..\include\polinom.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\list.cpp" />
+    <ClCompile Include="..\..\..\src\monom.cpp" />
+    <ClCompile Include="..\..\..\src\node.cpp" />
+    <ClCompile Include="..\..\..\src\polinom.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{38F1E746-652E-4894-8D02-D0D7CFA31ECB}</ProjectGuid>
+    <ProjectGuid>{00CE2F8E-573C-4585-94C4-33994370ADD1}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>polinom_lib</RootNamespace>
+    <RootNamespace>polinoms_lib</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -96,7 +102,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
