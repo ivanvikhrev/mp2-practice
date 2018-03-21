@@ -13,5 +13,8 @@
     <ClCompile Include="..\..\..\test\test_polinom.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\test\test_Rlist.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
