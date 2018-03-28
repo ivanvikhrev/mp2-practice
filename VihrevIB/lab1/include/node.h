@@ -14,8 +14,8 @@ public:
 
 	bool operator< (const Node<T>& N) const { return (data<N.data); }
 	bool operator> (const  Node<T>& N) const { return (data>N.data); }
-//	bool operator== (const  Node<T>& N) const { return (data == N.data); }
 	bool operator!= (const  Node<T>& N) const { return !(*this == N); }
 
+	//bool operator== (const  Node<T>& N) const { return (data == N.data); }
 	bool operator==(const Node<T>& node2) const { return (data == node2.data && next == node2.next); }
 };

@@ -6,7 +6,7 @@ public:
 	double coeff; //коэффициент
 	unsigned int abc; // степень
 	
-	Monom() { coeff = 0; abc = 0; } //конструктор по умолчанию
+	//Monom() { coeff = 0; abc = 0; } //конструктор по умолчанию
 	Monom(double COEFF = 0 , unsigned int ABC = 0) { coeff = COEFF; abc = ABC;}
 	
 	//Сравнение

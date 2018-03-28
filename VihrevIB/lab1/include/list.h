@@ -26,7 +26,7 @@ public:
 	Node<T>* GetCurr() const{ return current; }
 	void GetNext() { current = current->next; }
 	void Reset() { current = head->next;  } // перегрузить оператор присваивания 
-	bool IsEnded() { return current->next == head; }
+	bool IsEnded() { return current == head; }
 	
 	bool operator==(const Rlist<T>& RLst) const;								//Операторы
 	bool operator!=(const Rlist<T>& RLst) const { return !(*this == RLst); }	//Сравнения
@@ -76,7 +76,7 @@ Rlist<T>& Rlist<T>::operator=(const Rlist<T>& ListToCopy)
 	{
 		TempCurr1 = TempCurr1->next;
 		TempCurr2->next = new Node<T>(TempCurr1->data);
-		TempCurr2 = TempCurr1->next;
+		TempCurr2 = TempCurr2->next;
 	}
 	TempCurr2->next = head;
 	current = head;
