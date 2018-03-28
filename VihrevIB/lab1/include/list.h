@@ -22,11 +22,11 @@ public:
 	void Clean(); // очистка списка
 	
 	// методы навигации
-	Node<T>* GetHead() const { return head; } // указатель на голову
-	Node<T>* GetCurr() const{ return current; }
-	void GetNext() { current = current->next; }
-	void Reset() { current = head->next;  } // перегрузить оператор присваивания 
-	bool IsEnded() { return current == head; }
+	Node<T>* GetHead() const { return head; } // получить указатель на голову
+	Node<T>* GetCurr() const{ return current; } // получить указатель на текущий
+	void GetNext() { current = current->next; }// получить указатель на следующий
+	void Reset() { current = head->next;  } // переместить указатель в начало
+	bool IsEnded() { return current == head; } // проверка на конец
 	
 	bool operator==(const Rlist<T>& RLst) const;								//Операторы
 	bool operator!=(const Rlist<T>& RLst) const { return !(*this == RLst); }	//Сравнения
