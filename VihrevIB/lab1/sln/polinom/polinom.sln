@@ -1,0 +1,68 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.15
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gtest", "polinom\polinom.vcxproj", "{75848823-0704-4D2D-94B3-8B8D8DB87437}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sample_polinom", "sample_polinom\sample_polinom.vcxproj", "{33024D8B-923D-4484-8B91-233E6E4BC0F5}"
+	ProjectSection(ProjectDependencies) = postProject
+		{00CE2F8E-573C-4585-94C4-33994370ADD1} = {00CE2F8E-573C-4585-94C4-33994370ADD1}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "polinom_test", "polinom_test\polinom_test.vcxproj", "{42132143-D3D7-4E74-9A86-AEBFE1CF9B3D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{75848823-0704-4D2D-94B3-8B8D8DB87437} = {75848823-0704-4D2D-94B3-8B8D8DB87437}
+		{00CE2F8E-573C-4585-94C4-33994370ADD1} = {00CE2F8E-573C-4585-94C4-33994370ADD1}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "polinoms_lib", "polinoms_lib\polinoms_lib.vcxproj", "{00CE2F8E-573C-4585-94C4-33994370ADD1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{75848823-0704-4D2D-94B3-8B8D8DB87437}.Debug|x64.ActiveCfg = Debug|x64
+		{75848823-0704-4D2D-94B3-8B8D8DB87437}.Debug|x64.Build.0 = Debug|x64
+		{75848823-0704-4D2D-94B3-8B8D8DB87437}.Debug|x86.ActiveCfg = Debug|Win32
+		{75848823-0704-4D2D-94B3-8B8D8DB87437}.Debug|x86.Build.0 = Debug|Win32
+		{75848823-0704-4D2D-94B3-8B8D8DB87437}.Release|x64.ActiveCfg = Release|x64
+		{75848823-0704-4D2D-94B3-8B8D8DB87437}.Release|x64.Build.0 = Release|x64
+		{75848823-0704-4D2D-94B3-8B8D8DB87437}.Release|x86.ActiveCfg = Release|Win32
+		{75848823-0704-4D2D-94B3-8B8D8DB87437}.Release|x86.Build.0 = Release|Win32
+		{33024D8B-923D-4484-8B91-233E6E4BC0F5}.Debug|x64.ActiveCfg = Debug|x64
+		{33024D8B-923D-4484-8B91-233E6E4BC0F5}.Debug|x64.Build.0 = Debug|x64
+		{33024D8B-923D-4484-8B91-233E6E4BC0F5}.Debug|x86.ActiveCfg = Debug|Win32
+		{33024D8B-923D-4484-8B91-233E6E4BC0F5}.Debug|x86.Build.0 = Debug|Win32
+		{33024D8B-923D-4484-8B91-233E6E4BC0F5}.Release|x64.ActiveCfg = Release|x64
+		{33024D8B-923D-4484-8B91-233E6E4BC0F5}.Release|x64.Build.0 = Release|x64
+		{33024D8B-923D-4484-8B91-233E6E4BC0F5}.Release|x86.ActiveCfg = Release|Win32
+		{33024D8B-923D-4484-8B91-233E6E4BC0F5}.Release|x86.Build.0 = Release|Win32
+		{42132143-D3D7-4E74-9A86-AEBFE1CF9B3D}.Debug|x64.ActiveCfg = Debug|x64
+		{42132143-D3D7-4E74-9A86-AEBFE1CF9B3D}.Debug|x64.Build.0 = Debug|x64
+		{42132143-D3D7-4E74-9A86-AEBFE1CF9B3D}.Debug|x86.ActiveCfg = Debug|Win32
+		{42132143-D3D7-4E74-9A86-AEBFE1CF9B3D}.Debug|x86.Build.0 = Debug|Win32
+		{42132143-D3D7-4E74-9A86-AEBFE1CF9B3D}.Release|x64.ActiveCfg = Release|x64
+		{42132143-D3D7-4E74-9A86-AEBFE1CF9B3D}.Release|x64.Build.0 = Release|x64
+		{42132143-D3D7-4E74-9A86-AEBFE1CF9B3D}.Release|x86.ActiveCfg = Release|Win32
+		{42132143-D3D7-4E74-9A86-AEBFE1CF9B3D}.Release|x86.Build.0 = Release|Win32
+		{00CE2F8E-573C-4585-94C4-33994370ADD1}.Debug|x64.ActiveCfg = Debug|x64
+		{00CE2F8E-573C-4585-94C4-33994370ADD1}.Debug|x64.Build.0 = Debug|x64
+		{00CE2F8E-573C-4585-94C4-33994370ADD1}.Debug|x86.ActiveCfg = Debug|Win32
+		{00CE2F8E-573C-4585-94C4-33994370ADD1}.Debug|x86.Build.0 = Debug|Win32
+		{00CE2F8E-573C-4585-94C4-33994370ADD1}.Release|x64.ActiveCfg = Release|x64
+		{00CE2F8E-573C-4585-94C4-33994370ADD1}.Release|x64.Build.0 = Release|x64
+		{00CE2F8E-573C-4585-94C4-33994370ADD1}.Release|x86.ActiveCfg = Release|Win32
+		{00CE2F8E-573C-4585-94C4-33994370ADD1}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {49BC6E49-ED2A-45D4-9C34-FEA4E6E0659C}
+	EndGlobalSection
+EndGlobal
