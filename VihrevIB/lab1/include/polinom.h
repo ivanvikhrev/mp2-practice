@@ -2,41 +2,43 @@
 
 #include <iostream>
 #include <string>
+#include <algorithm>
 #include "Monom.h"
 #include "list.h"
+
 
 using std::string;
 using std::ostream;
 using std::cout;
+using std::cin;
 using std::endl;
 
 class Polinom {
 
-private:
+protected:
 	
-	Rlist<Monom> Pol_List;
+	Rlist<Monom> Monoms;
+	string name;
+	//вспомогательные методы
+	Rlist <Monom> Simplify(Rlist <Monom> POL); // привести подобные слагаемые
+	Rlist<Monom> Parsing(const string Line);// разбитие строки на мономы
 
 public:
 	
 	//Конструкторы
-	Polinom(const string Line = "" );
-	Polinom(Rlist<Monom> &P2) : Pol_List(P2) {}
-	Polinom(const Polinom& POL) : Pol_List(POL.Pol_List) {};  //
+	Polinom(const string Line = "" ); // конструктор по строке
+	Polinom(const Monom m) { Monoms.InsertAfter(Monoms.GetCurr(),m); }// конструктор  преобразования типа: от монома
+	Polinom(const Rlist<Monom> &P2) : Monoms(P2) {}; // конструктор преобразования типа: от списка 
+	Polinom(const Polinom& POL) : Monoms(POL.Monoms) {};  //конструктор копирования
 	
 	//Операторы
 	Polinom operator+ (const Polinom&) const;
-	Polinom operator- (const Polinom& POL) const { return (*this + POL*(-1)); }
+	Polinom operator- (const Polinom& POL) const { return (*this + POL*(-1.0)); }
 	Polinom operator* (const Polinom& POL) const;// умножение полинома на полином
 	Polinom operator* (const double c) const; // умножение полинома на константу справа
 	
-
-	
-	bool operator== (const Polinom& POL) const { return Pol_List == POL.Pol_List; }
-	bool operator!= (const Polinom& POL) const { return Pol_List != POL.Pol_List; }
-
-	Rlist <Monom> FindSimilar (Rlist <Monom> POL); // привести подобные слагаемые
-    Rlist<Monom> Parsing (const string Line);// разбитие строки на мономы
-
+	bool operator== (const Polinom& POL) const { return Monoms == POL.Monoms; }
+	bool operator!= (const Polinom& POL) const { return Monoms != POL.Monoms; }
 
 	friend Polinom operator* (const double C , const Polinom& POL) { return POL*C; } // умножение полинома на константу слева
 	friend ostream& operator<< (ostream& os, const Polinom&);

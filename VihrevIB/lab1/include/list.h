@@ -16,24 +16,24 @@ public:
 
 	//Методы
     Rlist<T>& operator=(const Rlist<T>& ListToCopy);
-	//void InsertToTail(); // Вставка в конец
 	void InsertAfter(Node<T>* N, T Data);
 	void OrderedInsert(T Data);       // Вставка в упорядоченный список
 	void Clean(); // очистка списка
 	
 	// методы навигации
-	Node<T>* GetHead() const { return head; } // получить указатель на голову
-	Node<T>* GetCurr() const{ return current; } // получить указатель на текущий
-	void GetNext() { current = current->next; }// получить указатель на следующий
+	Node<T>* GetCurr() const { return current; } // получить указатель на текущий
+	void SetNext() { current = current->next; }// переместить  указатель на следующий
 	void Reset() { current = head->next;  } // переместить указатель в начало
-	bool IsEnded() { return current == head; } // проверка на конец
-	
-	bool operator==(const Rlist<T>& RLst) const;								//Операторы
-	bool operator!=(const Rlist<T>& RLst) const { return !(*this == RLst); }	//Сравнения
+	bool IsEnd() const { return current == head; } // проверка на конец
+    
+	//Операторы сравнения
+	bool operator==(const Rlist<T>& RLst) const;							
+	bool operator!=(const Rlist<T>& RLst) const { return !(*this == RLst); }	
 
 	
 };
 
+// ............................................................................
 template <typename T>
 Rlist<T>::Rlist()
 {
@@ -42,7 +42,7 @@ Rlist<T>::Rlist()
 	head->next = head;
 	current = head;
 }
-
+// ............................................................................
 template <typename T>
 Rlist<T>::Rlist(const Rlist<T>& ListToCopy) 
 {
@@ -54,11 +54,11 @@ Rlist<T>::Rlist(const Rlist<T>& ListToCopy)
 	{
 		TempCurr= TempCurr->next;
 		current->next = new Node<T>(TempCurr->data);
-		GetNext();
+		SetNext();
 	}
 	current->next = head;
 }
-
+// ............................................................................
 template <class T>
 Rlist<T>::~Rlist()
 {
@@ -72,6 +72,7 @@ Rlist<T>& Rlist<T>::operator=(const Rlist<T>& ListToCopy)
 	Clean();
 	Node<T>* TempCurr1 = ListToCopy.head;
 	Node<T>* TempCurr2 = head;
+	
 	while (TempCurr1->next != ListToCopy.head)
 	{
 		TempCurr1 = TempCurr1->next;
@@ -82,7 +83,7 @@ Rlist<T>& Rlist<T>::operator=(const Rlist<T>& ListToCopy)
 	current = head;
 	return *this;
 }
-
+// ............................................................................
 template <class T>
 void Rlist<T>::InsertAfter(Node<T>* N, T Data)
 {
@@ -90,7 +91,7 @@ void Rlist<T>::InsertAfter(Node<T>* N, T Data)
 	N->next = new Node<T>(Data);
 	N->next->next = temp;
 }
-
+// ............................................................................
 template <class T>
 void Rlist<T>::OrderedInsert(T Data)
 {
@@ -98,13 +99,13 @@ void Rlist<T>::OrderedInsert(T Data)
 	current = head;
 
 	while ( (current->next->data > Data) && current->next != head)
-		GetNext();
+		SetNext();
 
-	Temp = current->next;
+	Temp = current->next; 
 	current->next = new Node<T>(Data);
 	current->next->next = Temp;
 }
-
+// ............................................................................
 template <class T>
 void Rlist<T>::Clean()
 {
@@ -118,7 +119,7 @@ void Rlist<T>::Clean()
 	}
 	head->next = head;
 }
-
+// ............................................................................
 template<class T>
 bool Rlist<T>::operator==(const Rlist<T>& RLst) const
 {
@@ -133,8 +134,9 @@ bool Rlist<T>::operator==(const Rlist<T>& RLst) const
 			temp1 = temp1->next;
 			temp2 = temp2->next;
 		}
-		if (temp1->data != temp2->data)
+		if (temp1 != head || temp2 != RLst.head)
 			flag = false;
 	}
 	return flag;
 }
+// ............................................................................
