@@ -1,108 +1,120 @@
 #pragma once
 #include "table.h"
-
+// класс А констр деструктор вирт метод и невирт метод 
+// печать названия
+// класс Б наследник и у него реализовать тоже самое мейн создает объект класса Б А* = нью Б Б* = нью Б
 template <typename T>
-class UnordTable : Table<T>
+class UnordTable : public Table<T> 
 {
 	protected:
-		vector<TabRecord<T>> Rows;
-		void Realloc();//?
+		void Realloc();
 	public:
 		// Конструкторы и деструктор
-		UnordTable();
+		UnordTable(unsigned int i = 10) : Table(i) {};
 		UnordTable(const UnordTable<T>& TabToCopy);
-		~UnordTable() { Clean(); };
-		//Методы
-		void Insert(T Row, string Key);
-		int Search(string Key);
-		void Delete(string Key);
-		void Clean() { Rows.clear(); Table<T>::CurrIndex = -1; Table<T>::CurrRecords = 0; };
-		template<class T2> friend std::ostream& operator<< (std::ostream& os, const UnordTable<T2>& Tab);
+		~UnordTable() { };
+		//Общие Методы
+		void Insert(const T Data, const string Key);
+		T* Search(const string Key);
+		void Delete(const string Key);
+	
+		template<class T> friend std::ostream& operator<< (std::ostream& os, const UnordTable<T>& Tab);
 
 };
 //............................................................................
 template <typename T>
-UnordTable<T>::UnordTable() : Table()
-{	
-	Rows.reserve(MaxRecords);
-}
-//............................................................................
-template <typename T>
 UnordTable<T>::UnordTable(const UnordTable<T>& TabToCopy)
 {
-	Rows = TabToCopy.Rows;
 	MaxRecords = TabToCopy.MaxRecords;
 	CurrIndex = TabToCopy.CurrIndex;
 	CurrRecords = TabToCopy.CurrRecords;
+	delete[] Rows;
+	Rows = new TabRecord<T>*[MaxRecords];
+	if (!IsEmpty())
+		for (int i = 0; i < CurrRecords; i++)
+			Rows[i] = new TabRecord<T>(*(TabToCopy.Rows[i]));
 }
 //............................................................................
 template <typename T>
 void UnordTable<T>::Realloc()
 {
-	MaxRecords *= 2;
-	Rows.reserve(MaxRecords);
+	unsigned int NewMaxRecords = (unsigned int)(MaxRecords*1.5);
+	TabRecord<T>** tmp = new TabRecord<T>*[NewMaxRecords];
+	for (int i = 0; i < MaxRecords; i++)
+		tmp[i] = Rows[i];
+	MaxRecords = NewMaxRecords;
+	delete[] Rows;
+	Rows = tmp;
 }
 //............................................................................
 template <typename T>
-void UnordTable<T>::Insert(T Data, string Key)
-{	
+void UnordTable<T>::Insert(const T Data, const string Key)
+{
 	if (IsFull())
 		Realloc();
-	TabRecord<T> Row(Data, Key); 
-	Rows.push_back(Row); // вставка в динамический массив
-	CurrRecords = Rows.size();
+	TabRecord<T> Row(Key, Data);
+	Reset();
+	while (!IsTabEnded() && Key != Rows[CurrIndex]->Key)
+		CurrIndex++;
+	if (IsEmpty())
+	{
+		CurrIndex++;
+	}
+	if (CurrIndex == CurrRecords)
+	{
+		Rows[CurrIndex] = new TabRecord<T>(Row);
+		CurrRecords++;
+		Reset();
+	}
+	else
+	{
+		Reset();
+		string s = "Key: " + Key + " - isn`t unique";
+		throw s;
+	}
 }
 //............................................................................
 template <typename T>
-int UnordTable<T>::Search(string Key)
+T* UnordTable<T>::Search(const string Key)
 {	
 	Reset();
-	int i = 0;
-	
+	T* tmp = nullptr;
 	if (IsEmpty())
-		i = -1;
-
-	while (!IsTabEnded())
-	{
-		if (Rows[CurrIndex].Name == Key)
-		{
-			i = CurrIndex;
-			break;
-		}
-
+		throw (string)"Cant Search In Empty Table";
+	while (!IsTabEnded() && Key != Rows[CurrIndex]->Key)
 		CurrIndex++;
+	if (!IsTabEnded())
+		tmp = Rows[CurrIndex]->Data;
+	else
+	{	
+		string s = Key + " Not Found";
+		throw s;
 	}
-	
-	if (IsTabEnded())
-		i = -1;
-	Reset();
-	return i ;
+	return tmp;
 }
 //............................................................................
 template <typename T>
 void UnordTable<T>::Delete(string Key)
 {
 	Reset();
-	int K = Search(Key);
-	if (K != -1)
-	{
-		Rows.erase(Rows.begin() + K);
-		CurrRecords = Rows.size();
-	}
+	if (IsEmpty())
+		throw (string)"Cant Delete From Empty Table";
+	Search(Key);
+	if (CurrRecords > 1)
+		Rows[CurrIndex] = Rows[--CurrRecords];
 	else
-		return;
-	
+		CurrRecords = 0;
 }
 //............................................................................
 //спросить почему так
-template <typename T2>
-std::ostream& operator<< (std::ostream& os, const UnordTable<T2>& Tab)
+template <typename T>
+std::ostream& operator<< (std::ostream& os, const UnordTable<T>& Tab)
 {	
 	unsigned int i = 0;
 
 	while(i < Tab.CurrRecords)
 	{
-		os << i << "." << Tab.Rows[i].Name << "  |   " << Tab.Rows[i].Data << std::endl;
+		os << i << ". " << Tab.Rows[i]->Key<< "  |   " << *(Tab.Rows[i]->Data) << std::endl;
 		i++;
 	}
 	if (Tab.CurrRecords == 0)

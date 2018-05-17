@@ -1,126 +1,157 @@
 #include "table.h"
 
 template <typename T>
-class OrdTable : Table<T>
+class OrdTable : public Table<T>
 {
 protected:
-	vector<TabRecord<T>> Rows;
-	void Realloc();//?
+	void Realloc();
 public:
 	// Конструкторы и деструктор
-	OrdTable();
+	OrdTable(unsigned int i = 10);
 	OrdTable(const OrdTable<T>& TabToCopy);
-	~OrdTable() { Clean(); };
+	~OrdTable() {};
 	//Методы
-	void Insert(T Row, string Key);
-	int Search(string Key);
-	void Delete(string Key);
-	void Clean() { Rows.clear(); CurrIndex = -1; CurrRecords = 0; };
-	template<class T2> friend std::ostream& operator<< (std::ostream& os, const OrdTable<T2>& Tab);
+	void Insert(const T Data, const string Key);
+	T* Search(const string Key);
+	void Delete(const string Key);
+	template<class T> friend std::ostream& operator<< (std::ostream& os, const OrdTable<T>& Tab);
 
 };
 
 //............................................................................
 template <typename T>
-OrdTable<T>::OrdTable() : Table()
+OrdTable<T>::OrdTable(unsigned int i) : Table(i)
 {
-	Rows.reserve(MaxRecords);
 }
 //............................................................................
-template <typename T>
+template <typename T>// реализовать в абстрактном классе
 OrdTable<T>::OrdTable(const OrdTable<T>& TabToCopy)
 {
-	Rows = TabToCopy.Rows;
 	MaxRecords = TabToCopy.MaxRecords;
 	CurrIndex = TabToCopy.CurrIndex;
 	CurrRecords = TabToCopy.CurrRecords;
+	delete[] Rows;
+	Rows = new TabRecord<T>*[MaxRecords];
+	if (!IsEmpty())
+		for (int i = 0; i < CurrRecords; i++)
+			Rows[i] = new TabRecord<T>(*(TabToCopy.Rows[i]));
 }
 //............................................................................
 template <typename T>
 void OrdTable<T>::Realloc()
 {
-	MaxRecords *= 2;
-	Rows.reserve(MaxRecords);
+	unsigned int NewMaxRecords = (unsigned int)(MaxRecords*1.5);
+	TabRecord<T>** tmp = new TabRecord<T>*[NewMaxRecords];
+	for (int i = 0; i < MaxRecords; i++)
+		tmp[i] = Rows[i];
+	MaxRecords = NewMaxRecords;
+	delete[] Rows;
+	Rows = tmp;
 }
 //............................................................................
 template <typename T>
-void OrdTable<T>::Insert(T Data, string Key)
+void OrdTable<T>::Insert(const T Data, const string Key)
 {
 	if (IsFull())
 		Realloc();
 
-	TabRecord<T> Row(Data, Key);
+	TabRecord<T> Row(Key,Data);
+	Reset();
 	
-	if (!IsEmpty())
+	Reset();
+	while (!IsTabEnded() && Row.Key >= Rows[CurrIndex]->Key)
 	{
-		Reset();
-		while (CurrIndex < CurrRecords - 1 && !IsEmpty() && Row.Name > Rows[CurrIndex].Name)
+		if (Rows[CurrIndex]->Key == Row.Key) 
 		{
-			CurrIndex++;
+			string s = "Key: " + Key + " - isn`t unique";
+			throw s;
 		}
-		Rows.insert(Rows.begin() + CurrIndex + 1, Row);
-		CurrRecords = Rows.size();
-		
+		CurrIndex++;
 	}
-	else
+	if (IsEmpty())
+		CurrIndex++;
+	CurrRecords++;
+	for (int i = CurrRecords-1; i > CurrIndex; i--)
 	{
-		Rows.push_back(Row);
-		CurrRecords = Rows.size();
+		Rows[i] = Rows[i - 1];
+
 	}
+	Rows[CurrIndex] = new TabRecord<T>(Row);
+	Reset();
+	
 }
 //............................................................................
 template <typename T>
-int OrdTable<T>::Search(string Key)
+T* OrdTable<T>::Search(const string Key)
 {
 	Reset();
-	int i = 0 , j = CurrRecords;
+	T* tmp = nullptr;
 
-	if (IsEmpty())
-		i = -1;
-	
-	while (j-i > 0)
-	{
-		if (Key > Rows[i+(j-i)/ 2].Name)
+	if (!IsEmpty())
+	{	
+		int i = -1, j = CurrRecords;
+		int mid;
+		while (i < j -1 ) //
+		{	
+			mid = (j + i) / 2;
+			if (Key >= Rows[mid]->Key)
+			{
+				i = mid;
+			}
+			else
+			{
+				j = mid;
+			}
+
+		}
+		if (Key == Rows[i]->Key)
 		{
-			i += (j-i) / 2 + 1 ;
+			CurrIndex = i;
+			tmp = Rows[CurrIndex]->Data;
 		}
 		else
 		{
-			j /= 2;
+			string s = Key + " Not Found";
+			throw s;
 		}
-	
 	}
-
-	if (IsTabEnded())
-		i = -1;
-	Reset();
-	return i;
+	else
+		throw (string)"Table Is Empty";
+	return tmp;
 }
 //............................................................................
 template <typename T>
-void OrdTable<T>::Delete(string Key)
+void OrdTable<T>::Delete(const string Key)
 {
 	Reset();
-	int K = Search(Key);
-	if (K != -1)
-	{
-		Rows.erase(Rows.begin() + K);
-		CurrRecords = Rows.size();
+	if (IsEmpty())
+		throw (string)"Cant Delete From Empty Table";
+	Search(Key);
+	if (CurrRecords > 1)
+	{	
+		CurrRecords--;
+		for (int i = CurrIndex; i < CurrRecords; i++)
+		{
+			Rows[i] = Rows[i + 1];
+
+		}
+		Reset();
 	}
 	else
-		return;
+		CurrRecords = 0;
+
+
 
 }
 //............................................................................
-//спросить почему так
-template <typename T2>
-std::ostream& operator<< (std::ostream& os, const OrdTable<T2>& Tab)
+template <typename T>
+std::ostream& operator<< (std::ostream& os, const OrdTable<T>& Tab)
 {
 	unsigned int i = 0;
 
 	while (i < Tab.CurrRecords)
 	{
-		os << i << "." << Tab.Rows[i].Name << "  |   " << Tab.Rows[i].Data << std::endl;
+		os << i << ". " << Tab.Rows[i]->Key << "  |   " << *(Tab.Rows[i]->Data) << std::endl;
 		i++;
 	}
 	if (Tab.CurrRecords == 0)
