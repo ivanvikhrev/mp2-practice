@@ -11,7 +11,7 @@ class TabRecord
 {
 	public:
 		string Key;
-		T	Data; // сделать указателем
+		T	Data; 
 		TabRecord() { Key = "EMPTY RECORD"; Data = 0;}
 		TabRecord(string K , T D ) { Key = K; Data = D;} //
 		TabRecord(const TabRecord& TR) { Key = TR.Key; Data = TR.Data; }
@@ -45,7 +45,6 @@ class Table
 			virtual T* GetCurr() const;
 			int GetCurrRecords() const { return CurrRecords; };
 			int GetMaxRecords() const { return MaxRecords; };
-			//переделать навигацию
 };
 //..........................................................
 template<typename T>

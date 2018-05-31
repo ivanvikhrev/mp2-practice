@@ -64,11 +64,11 @@ int main()
 					cin >> Key;
 					if (Key == "end") break;
 					try
-					{
+					{	
+						system("cls");
 						Utab.Delete(Key);
 						Otab.Delete(Key);
 						Htab.Delete(Key);
-						system("cls");
 						cout << "UnordTable: " << endl << Utab << endl;
 						cout << "OrdTable :" << endl << Otab << endl;
 						cout << "HashTable :" << endl << Htab << endl << endl;
