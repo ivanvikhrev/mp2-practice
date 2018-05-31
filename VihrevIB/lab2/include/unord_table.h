@@ -1,8 +1,6 @@
 #pragma once
 #include "table.h"
-// класс А констр деструктор вирт метод и невирт метод 
-// печать названия
-// класс Б наследник и у него реализовать тоже самое мейн создает объект класса Б А* = нью Б Б* = нью Б
+
 template <typename T>
 class UnordTable : public Table<T> 
 {
@@ -23,16 +21,9 @@ class UnordTable : public Table<T>
 };
 //............................................................................
 template <typename T>
-UnordTable<T>::UnordTable(const UnordTable<T>& TabToCopy)
+UnordTable<T>::UnordTable(const UnordTable<T>& TabToCopy) : Table(TabToCopy)
 {
-	MaxRecords = TabToCopy.MaxRecords;
-	CurrIndex = TabToCopy.CurrIndex;
-	CurrRecords = TabToCopy.CurrRecords;
-	delete[] Rows;
-	Rows = new TabRecord<T>*[MaxRecords];
-	if (!IsEmpty())
-		for (int i = 0; i < CurrRecords; i++)
-			Rows[i] = new TabRecord<T>(*(TabToCopy.Rows[i]));
+	
 }
 //............................................................................
 template <typename T>
@@ -52,7 +43,7 @@ void UnordTable<T>::Insert(const T Data, const string Key)
 {
 	if (IsFull())
 		Realloc();
-	TabRecord<T> Row(Key, Data);
+	TabRecord<T>* Row = new TabRecord<T>(Key, Data);
 	Reset();
 	while (!IsTabEnded() && Key != Rows[CurrIndex]->Key)
 		CurrIndex++;
@@ -62,7 +53,7 @@ void UnordTable<T>::Insert(const T Data, const string Key)
 	}
 	if (CurrIndex == CurrRecords)
 	{
-		Rows[CurrIndex] = new TabRecord<T>(Row);
+		Rows[CurrIndex] = Row;
 		CurrRecords++;
 		Reset();
 	}
@@ -84,7 +75,7 @@ T* UnordTable<T>::Search(const string Key)
 	while (!IsTabEnded() && Key != Rows[CurrIndex]->Key)
 		CurrIndex++;
 	if (!IsTabEnded())
-		tmp = Rows[CurrIndex]->Data;
+		tmp = &(Rows[CurrIndex]->Data);
 	else
 	{	
 		string s = Key + " Not Found";
@@ -114,7 +105,7 @@ std::ostream& operator<< (std::ostream& os, const UnordTable<T>& Tab)
 
 	while(i < Tab.CurrRecords)
 	{
-		os << i << ". " << Tab.Rows[i]->Key<< "  |   " << *(Tab.Rows[i]->Data) << std::endl;
+		os << i << ". " << Tab.Rows[i]->Key<< "  |   " << Tab.Rows[i]->Data << std::endl;
 		i++;
 	}
 	if (Tab.CurrRecords == 0)

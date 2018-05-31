@@ -1,11 +1,7 @@
 #pragma once
 #include "table.h"
-
-#pragma once
-#include "table.h"
-
 template <typename T>
-class HashTable : public Table<T> //?
+class HashTable : public Table<T> 
 {
 protected:
 	int* flag;
@@ -24,7 +20,7 @@ public:
 	void SetNext();
 	T* GetCurr() const;
 	void Reset();
-	bool IsTabEnded() const { return CurrIndex == CurrRecords || CurrIndex == -1; };// return false;
+	bool IsTabEnded() const { return false; };
 	template<class T> friend std::ostream& operator<< (std::ostream& os, const HashTable<T>& Tab);
 
 };
@@ -79,7 +75,7 @@ T* HashTable<T>::GetCurr()  const
 
 	if(!IsEmpty())
 	{	
-		tmp = Rows[CurrIndex]->Data;
+		tmp = &(Rows[CurrIndex]->Data);
 	}
 	else
 	{
@@ -111,7 +107,7 @@ void HashTable<T>::Realloc()
 	TabRecord<T>** tmp = new TabRecord<T>*[OldMaxRecords];
 	for (int i = 0; i < OldMaxRecords; i++)
 	{
-		tmp[i] = new TabRecord<T>(*Rows[i]);
+		tmp[i] = Rows[i];
 	}
 
 	delete[] Rows;
@@ -124,7 +120,7 @@ void HashTable<T>::Realloc()
 	Rows = new TabRecord<T>*[MaxRecords];
 	for (int i = 0; i < OldMaxRecords; i++)
 	{
-		Insert(*(tmp[i]->Data), tmp[i]->Key); // ? 
+		Insert(tmp[i]->Data, tmp[i]->Key); // ? 
 	}
 }
 //............................................................................
@@ -146,12 +142,12 @@ void HashTable<T>::Insert(const T Data, const string Key)
 {
 	if (IsFull())
 		Realloc();
-	TabRecord<T> Row(Key, Data);
+	TabRecord<T>* Row = new TabRecord<T>(Key, Data);
 	Reset();
 	CurrIndex = HashFunc(Key);
 	if (flag[CurrIndex] == 0 || flag[CurrIndex] == -1 )
 	{
-		Rows[CurrIndex] = new TabRecord<T>(Row);
+		Rows[CurrIndex] = Row; 
 		CurrRecords++;
 		flag[CurrIndex] = 1;
 		Reset();
@@ -162,9 +158,9 @@ void HashTable<T>::Insert(const T Data, const string Key)
 		{	
 			int ind = CurrIndex;
 			while (flag[CurrIndex] == 1 && CurrIndex+1 != ind)
-				CurrIndex = (CurrIndex+1)  % MaxRecords; // 
-			Rows[CurrIndex] = new TabRecord<T>(Row);
-			CurrRecords++;//
+				CurrIndex = (CurrIndex+1)  % MaxRecords; 
+			Rows[CurrIndex] = Row; 
+			CurrRecords++;
 			flag[CurrIndex] = 1;
 			Reset();
 		}
@@ -187,7 +183,7 @@ T* HashTable<T>::Search(const string Key)
 	CurrIndex = HashFunc(Key);
 	
 	if(Rows[CurrIndex]->Key == Key)
-		tmp = Rows[CurrIndex]->Data;
+		tmp = &(Rows[CurrIndex]->Data);
 	else
 	{	
 		int ind = CurrIndex;
@@ -196,7 +192,7 @@ T* HashTable<T>::Search(const string Key)
 			CurrIndex = (CurrIndex + 1) % MaxRecords;
 			if (Rows[CurrIndex]->Key == Key)
 					{
-						tmp = Rows[CurrIndex]->Data;
+						tmp = &(Rows[CurrIndex]->Data);
 						break;
 					}
 		}
@@ -227,16 +223,6 @@ void HashTable<T>::Delete(string Key)
 	Rows[CurrIndex] = new TabRecord<T>(A);
 	CurrRecords--;
 
-	/*int F =0,E = 0;
-
-	for (int i = 0; i < MaxRecords; i++)
-	{
-		if (flag[i] == 1)
-			F++;
-		else
-			E++;
-	}*/
-
 	Reset();
 }
 //............................................................................
@@ -250,7 +236,7 @@ std::ostream& operator<< (std::ostream& os, const HashTable<T>& Tab)
 	{	
 		if (Tab.flag[i] == 1)
 		{
-			os << i << ". " << Tab.Rows[i]->Key << "  |   " << *(Tab.Rows[i]->Data) << std::endl;
+			os << i << ". " << Tab.Rows[i]->Key << "  |   " << Tab.Rows[i]->Data << std::endl;
 		}
 		i++;
 	}

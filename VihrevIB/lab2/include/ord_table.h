@@ -24,17 +24,10 @@ OrdTable<T>::OrdTable(unsigned int i) : Table(i)
 {
 }
 //............................................................................
-template <typename T>// реализовать в абстрактном классе
-OrdTable<T>::OrdTable(const OrdTable<T>& TabToCopy)
+template <typename T>
+OrdTable<T>::OrdTable(const OrdTable<T>& TabToCopy) : Table(TabToCopy)
 {
-	MaxRecords = TabToCopy.MaxRecords;
-	CurrIndex = TabToCopy.CurrIndex;
-	CurrRecords = TabToCopy.CurrRecords;
-	delete[] Rows;
-	Rows = new TabRecord<T>*[MaxRecords];
-	if (!IsEmpty())
-		for (int i = 0; i < CurrRecords; i++)
-			Rows[i] = new TabRecord<T>(*(TabToCopy.Rows[i]));
+	
 }
 //............................................................................
 template <typename T>
@@ -55,13 +48,13 @@ void OrdTable<T>::Insert(const T Data, const string Key)
 	if (IsFull())
 		Realloc();
 
-	TabRecord<T> Row(Key,Data);
+	TabRecord<T>* Row = new TabRecord<T>(Key, Data);
 	Reset();
 	
 	Reset();
-	while (!IsTabEnded() && Row.Key >= Rows[CurrIndex]->Key)
+	while (!IsTabEnded() && Row->Key >= Rows[CurrIndex]->Key)
 	{
-		if (Rows[CurrIndex]->Key == Row.Key) 
+		if (Rows[CurrIndex]->Key == Row->Key) 
 		{
 			string s = "Key: " + Key + " - isn`t unique";
 			throw s;
@@ -76,7 +69,7 @@ void OrdTable<T>::Insert(const T Data, const string Key)
 		Rows[i] = Rows[i - 1];
 
 	}
-	Rows[CurrIndex] = new TabRecord<T>(Row);
+	Rows[CurrIndex] = Row; 
 	Reset();
 	
 }
@@ -107,7 +100,7 @@ T* OrdTable<T>::Search(const string Key)
 		if (Key == Rows[i]->Key)
 		{
 			CurrIndex = i;
-			tmp = Rows[CurrIndex]->Data;
+			tmp = &(Rows[CurrIndex]->Data);
 		}
 		else
 		{
@@ -151,7 +144,7 @@ std::ostream& operator<< (std::ostream& os, const OrdTable<T>& Tab)
 
 	while (i < Tab.CurrRecords)
 	{
-		os << i << ". " << Tab.Rows[i]->Key << "  |   " << *(Tab.Rows[i]->Data) << std::endl;
+		os << i << ". " << Tab.Rows[i]->Key << "  |   " << Tab.Rows[i]->Data << std::endl;
 		i++;
 	}
 	if (Tab.CurrRecords == 0)

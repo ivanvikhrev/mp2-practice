@@ -34,29 +34,6 @@ TEST_F(EmptyUTable, copied_empty_table_is_correct)
 	EXPECT_EQ(Tab.IsEmpty(), T.IsEmpty());
 }
 ////............................................................................
-////TEST_F(EmptyUTable, can_assign_two_empty_tables)
-////{
-////	UnordTable<int> T2;
-////	ASSERT_NO_THROW(Tab = T2);
-////}
-////............................................................................
-////TEST_F(EmptyUTable, can_assign_empty_table_to_itself)
-////{
-////	ASSERT_NO_THROW(Tab = Tab);
-////}
-////............................................................................
-////TEST_F(EmptyUTable, can_clean_empty_table)
-////{
-////	ASSERT_NO_THROW(Tab.Clean());
-////}
-//
-////............................................................................
-////TEST_F(EmptyUTable, clean_empty_table_is_correct)
-////{
-////	Tab.Clean();
-////	EXPECT_EQ(true, Tab.IsEmpty());
-////}
-////............................................................................
 TEST_F(EmptyUTable, cant_get_current_from_empty_table)
 {
 	ASSERT_ANY_THROW(Tab.GetCurr());

@@ -34,29 +34,6 @@ TEST_F(EmptyHTable, copied_empty_table_is_correct)
 	EXPECT_EQ(Tab.IsEmpty(), T.IsEmpty());
 }
 ////............................................................................
-////TEST_F(EmptyHTable, can_assign_two_empty_tables)
-////{
-////	HashTable<int> T2;
-////	ASSERT_NO_THROW(Tab = T2);
-////}
-////............................................................................
-////TEST_F(EmptyHTable, can_assign_empty_table_to_itself)
-////{
-////	ASSERT_NO_THROW(Tab = Tab);
-////}
-////............................................................................
-////TEST_F(EmptyHTable, can_clean_empty_table)
-////{
-////	ASSERT_NO_THROW(Tab.Clean());
-////}
-//
-////............................................................................
-////TEST_F(EmptyHTable, clean_empty_table_is_correct)
-////{
-////	Tab.Clean();
-////	EXPECT_EQ(true, Tab.IsEmpty());
-////}
-////............................................................................
 TEST_F(EmptyHTable, cant_get_current_from_empty_table)
 {
 	ASSERT_ANY_THROW(Tab.GetCurr());
@@ -73,11 +50,11 @@ TEST_F(EmptyHTable, reset_empty_table_is_correct)
 	ASSERT_ANY_THROW(Tab.GetCurr());
 }
 ////............................................................................
-TEST_F(EmptyHTable, is_end_is_correct_for_empty_table)
-{
-	bool k = Tab.IsTabEnded();
-	EXPECT_EQ(true, Tab.IsTabEnded());
-}
+//TEST_F(EmptyHTable, is_end_is_correct_for_empty_table)
+//{
+//	bool k = Tab.IsTabEnded();
+//	EXPECT_EQ(true, Tab.IsTabEnded());
+//}
 ////............................................................................
 TEST_F(EmptyHTable, cant_set_next_empty_table)
 {

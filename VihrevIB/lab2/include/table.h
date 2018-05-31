@@ -11,12 +11,12 @@ class TabRecord
 {
 	public:
 		string Key;
-		T*	Data; // сделать указателем
-		TabRecord() { Key = "EMPTY RECORD"; Data = new T(NULL); }
-		TabRecord(string K , T D ) { Key = K; Data = new T(D);} //
-		TabRecord(const TabRecord& TR) { Key = TR.Key; Data = new T(*(TR.Data)); }
+		T	Data; // сделать указателем
+		TabRecord() { Key = "EMPTY RECORD"; Data = 0;}
+		TabRecord(string K , T D ) { Key = K; Data = D;} //
+		TabRecord(const TabRecord& TR) { Key = TR.Key; Data = TR.Data; }
 		
-		TabRecord<T>& operator=(const TabRecord<T>& TabR) { Data = new T(*(TabR.Data)); Key = TabR.Key; return *this; }
+		TabRecord<T>& operator=(const TabRecord<T>& TabR) { Data = TabR.Data; Key = TabR.Key; return *this; }
 };
 
 template <typename T>
@@ -30,6 +30,7 @@ class Table
 			virtual void Realloc() = 0;
 	public:
 			Table(unsigned int i = 10);
+			Table(const Table<T>& TabToCopy);
 			virtual ~Table() { delete[] Rows; }; //?
 			//Общие методы
 			virtual void Insert(const T Data, const string Key) = 0;
@@ -71,7 +72,7 @@ T* Table<T>::GetCurr() const
 	T* tmp;
 	if (CurrIndex >= 0 && CurrIndex<CurrRecords)
 	{
-		tmp = Rows[CurrIndex]->Data;
+		tmp = &(Rows[CurrIndex]->Data);
 	}
 	else
 	{
@@ -89,4 +90,17 @@ void Table<T>::SetNext()
 		throw (string)"Table Is Empty";
 	if (IsTabEnded())
 		Reset();
+}
+
+template <typename T>
+Table<T>::Table(const Table<T>& TabToCopy)
+{
+	MaxRecords = TabToCopy.MaxRecords;
+	CurrIndex = TabToCopy.CurrIndex;
+	CurrRecords = TabToCopy.CurrRecords;
+	delete[] Rows;
+	Rows = new TabRecord<T>*[MaxRecords];
+	if (!IsEmpty())
+		for (int i = 0; i < CurrRecords; i++)
+			Rows[i] = new TabRecord<T>(*(TabToCopy.Rows[i]));
 }
